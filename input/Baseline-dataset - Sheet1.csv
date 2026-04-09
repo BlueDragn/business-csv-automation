@@ -1,0 +1,3 @@
+order_id,customer_email,amount,currency,order_date,branch_id,payment_method
+1,test1@gmail.com,100,INR,2024-01-01,B001,upi
+2,test2@gmail.com,200,INR,2024-01-02,B002,card
