@@ -13,6 +13,9 @@ for row in loaded_data:
     #Rule 1: Order ID should not be empty:Required
     if not order_id:
         errors.append("Order ID is missing")
+    else:
+        order_id = order_id.strip()
+        row["order_id"] = order_id
 
     #Rule 2: Order ID should be unique
     if order_id:
@@ -51,25 +54,32 @@ for row in loaded_data:
         for char in amount:
             if char.isdigit() or char == ".":
                 cleaned_amount += char
-
         try:
             amount_value = float(cleaned_amount)
             if amount_value <= 0:
                 errors.append("invalid_amount")
             row["amount"] = amount_value
+        except ValueError:
+            errors.append("invalid_amount")
 
+    if not cleaned_amount:
+        errors.append("invalid_amount")
+    else:
+        try:
+            amount_value = float(cleaned_amount)
+            if amount_value <= 0:
+                errors.append("invalid_amount")
+            row["amount"] = amount_value
         except ValueError:
             errors.append("invalid_amount")
 
 
     # Currency Validation
-
     currency = row.get("currency")
     #Rule 1: Currency should not be empty:Required
-    if not currency:
+    if not currency or not currency.strip():
         errors.append("missing_currency")
-    #Rule 2: Currency should be a valid ISO 4217 code
-    if currency:
+    else:
         currency = currency.strip().upper()
         row["currency"] = currency
 
@@ -81,11 +91,9 @@ for row in loaded_data:
 
     # Order Date Validation
     order_date = row.get("order_date")
-
     #Rule 1: Order Date should not be empty:Required
-    if not order_date:
+    if not order_date or not order_date.strip():
         errors.append("missing_order_date")
-
     #Rule 2: Order Date should be in a valid format (YYYY-MM-DD)
     if order_date:
         order_date = order_date.strip()
@@ -107,20 +115,19 @@ for row in loaded_data:
         else:
             row["order_date"] = parsed_date.strftime("%Y-%m-%d")
 
+
+
     # Payment Method Validation
     payment_method = row.get("payment_method")
 
-    if payment_method:
+    if payment_method and payment_method.strip():
         payment_method = payment_method.strip().lower()
         row["payment_method"] = payment_method
 
         allowed_payment_methods = {"upi", "card", "cash"}
 
-        if payment_method and payment_method not in allowed_payment_methods:
+        if payment_method not in allowed_payment_methods:
             errors.append("invalid_payment_method")
-
-
-
 
 
     print(f"Row: {row}, Errors: {errors}")
