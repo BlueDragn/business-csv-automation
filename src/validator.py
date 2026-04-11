@@ -129,6 +129,14 @@ for row in loaded_data:
         if payment_method not in allowed_payment_methods:
             errors.append("invalid_payment_method")
 
+    # Branch Id
+    branch_id = row.get("branch_id")
+    if not branch_id or not branch_id.strip():
+        errors.append("missing_branch_id")
+    else:
+        branch_id = branch_id.strip()
+        row["branch_id"] = branch_id
+
 
     print(f"Row: {row}, Errors: {errors}")
 
