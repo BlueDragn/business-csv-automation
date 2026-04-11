@@ -1,5 +1,5 @@
 import data_loader
-
+from  datetime import datetime
 
 loaded_data = data_loader.data_loader()
 
@@ -79,9 +79,33 @@ for row in loaded_data:
             errors.append("invalid_currency")
 
 
+    # Order Date Validation
+    order_date = row.get("order_date")
+
+    #Rule 1: Order Date should not be empty:Required
+    if not order_date:
+        errors.append("missing_order_date")
+
+    #Rule 2: Order Date should be in a valid format (YYYY-MM-DD)
+    if order_date:
+        order_date = order_date.strip()
+
+        parsed_date = None
+
+        formats = ["%Y-%m-%d", "%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d", "%d/%m/%Y"]
+
+        for fmt in formats:
+            try:
+                parsed_date = datetime.strptime(order_date, fmt)
+                break
+            except:
+                continue
 
 
-
+        if not parsed_date:
+            errors.append("invalid_order_date")
+        else:
+            row["order_date"] = parsed_date.strftime("%Y-%m-%d")
 
 
     print(f"Row: {row}, Errors: {errors}")
