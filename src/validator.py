@@ -107,6 +107,21 @@ for row in loaded_data:
         else:
             row["order_date"] = parsed_date.strftime("%Y-%m-%d")
 
+    # Payment Method Validation
+    payment_method = row.get("payment_method")
+
+    if payment_method:
+        payment_method = payment_method.strip().lower()
+        row["payment_method"] = payment_method
+
+        allowed_payment_methods = {"upi", "card", "cash"}
+
+        if payment_method and payment_method not in allowed_payment_methods:
+            errors.append("invalid_payment_method")
+
+
+
+
 
     print(f"Row: {row}, Errors: {errors}")
 
