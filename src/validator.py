@@ -62,6 +62,28 @@ for row in loaded_data:
             errors.append("invalid_amount")
 
 
+    # Currency Validation
+
+    currency = row.get("currency")
+    #Rule 1: Currency should not be empty:Required
+    if not currency:
+        errors.append("missing_currency")
+    #Rule 2: Currency should be a valid ISO 4217 code
+    if currency:
+        currency = currency.strip().upper()
+        row["currency"] = currency
+
+        allowed_currencies = {"INR", "USD", "EUR"}
+
+        if currency not in allowed_currencies:
+            errors.append("invalid_currency")
+
+
+
+
+
+
+
     print(f"Row: {row}, Errors: {errors}")
 
 
