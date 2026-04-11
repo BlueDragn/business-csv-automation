@@ -36,4 +36,33 @@ for row in loaded_data:
             errors.append("invalid_email")
 
 
+    # Price Validation
+    amount = row.get("amount")
+    #Rule 1: Price should not be empty:Required
+    if not amount:
+        errors.append("missing_amount")
+    #Rule 2: Price should be a positive number
+    if amount:
+
+        amount = str(amount).strip()
+
+        cleaned_amount = ""
+
+        for char in amount:
+            if char.isdigit() or char == ".":
+                cleaned_amount += char
+
+        try:
+            amount_value = float(cleaned_amount)
+            if amount_value <= 0:
+                errors.append("invalid_amount")
+            row["amount"] = amount_value
+
+        except ValueError:
+            errors.append("invalid_amount")
+
+
+    print(f"Row: {row}, Errors: {errors}")
+
+
 
