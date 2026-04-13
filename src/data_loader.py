@@ -1,7 +1,7 @@
 import csv
-def data_loader():
+def load_data(file_path):
     data = []
-    with open('input/messy_data.csv - Sheet1.csv', 'r') as file:
+    with open(file_path, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
 
@@ -10,8 +10,8 @@ def data_loader():
                 continue
             cleaned_row = {}
             for key, value in row.items():
-                if value:
-                    cleaned_row[key] = value.strip()
+                if value is not None:
+                    cleaned_row[key] = str(value).strip()
                 else:
                     cleaned_row[key] = value
 
